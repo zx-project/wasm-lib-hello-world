@@ -1,0 +1,31 @@
+export struct RandomAccess+ {
+  u8 size;
+  u8 mem[];
+}
+
+export fn read(RandomAccess+L *self, u8 mut *out, usize offset, usize size) -> usize
+  where offset + size < L
+  where len(out) >= size
+  where offset < len(out)
+{
+  usize mut bytes_read = 0;
+  for (usize mut i = 0; i < size; ++i) {
+    static_attest(len(self->mem) > offset + i);
+    out[i] = self->mem[offset + i];
+    bytes_read++;
+  }
+  return bytes_read;
+}
+
+export fn write(RandomAccess+L mut *self, u8 *in, usize offset, usize size) -> usize
+  where offset + size < L
+  where len(in) >= size
+{
+  usize mut bytes_written = 0;
+  for (usize mut i = 0; i < size; ++i) {
+    static_attest(len(self->mem) > offset + i);
+    self->mem[offset + i] = in[i];
+    bytes_written++;
+  }
+  return bytes_written;
+}
