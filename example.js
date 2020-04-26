@@ -1,10 +1,11 @@
-const { WASI } = require('wasi')
 const assert = require('assert')
 const fs = require('fs')
 
-const wasi = new WASI(process) // argv, env
 const buffer = new Uint8Array(fs.readFileSync('./target/release/lib/libwhw.so'))
-const imports = {  wasi_snapshot_preview1: wasi.wasiImport }
+const memory = new WebAssembly.Memory({ initial: 256, maximum: 256 })
+const imports = {
+  env: { memory }
+}
 
 WebAssembly.instantiate(buffer, imports).then(onwasm, onerror)
 
@@ -14,16 +15,13 @@ function onerror(err) {
 
 function onwasm(wasm) {
   const { instance } = wasm
-  const heap = new Uint8Array(wasm.instance.exports.memory.buffer)
+  const heap = new Uint8Array(memory.buffer)
   const ram = instance.exports.__heap_base
 
   const sizeofRandomAccess = instance.exports.sizeof_whw_RandomAccess()
   const string = "hello"
   const offset = 8
   const L = 32 // tail size
-
-  // required, even if a `_start()` function is omitted
-  wasi.start(instance)
 
   // write "hello" to the heap
   assert(string.length === Buffer.from(string).copy(heap, ram + sizeofRandomAccess + L))
