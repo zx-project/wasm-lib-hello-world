@@ -122,7 +122,7 @@ function onerror(err) {
 
 function onwasm(wasm) {
   const { instance } = wasm
-  const heap = new Uint8Array(memory.buffer)
+  const heap = Buffer.from(memory.buffer)
   const ram = instance.exports.__heap_base
 
   const sizeofRandomAccess = instance.exports.sizeof_whw_RandomAccess()

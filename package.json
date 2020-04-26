@@ -1,0 +1,27 @@
+{
+  "name": "wasm-lib-hello-world",
+  "version": "0.0.0",
+  "description": "A hello world for WASM/WASI modules with ZZ",
+  "main": "example.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "browser": "budo example.js -p 3000 -- -t brfs",
+    "test": ":"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zx-project/wasm-lib-hello-world.git"
+  },
+  "author": "",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/zx-project/wasm-lib-hello-world/issues"
+  },
+  "homepage": "https://github.com/zx-project/wasm-lib-hello-world#readme",
+  "devDependencies": {
+    "brfs": "^2.0.2",
+    "budo": "^11.6.3"
+  }
+}
